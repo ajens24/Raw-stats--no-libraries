@@ -1,0 +1,156 @@
+# Finding the z-score of a dataset. Use for when you have different units of measures between datasets.
+data_1= [16, 16, 12, 12, 17, 18, 14, 15, 21, 18, 15, 18, 14, 13, 17, 13, 16, 12, 14, 17, 24, 14, 10, 11,\
+15, 27, 9, 12, 15, 24, 12, 15, 20, 16, 17, 18, 16, 11, 22, 26, 11, 19, 15, 18, 18, 13, 20, 16, 23,\
+26, 17, 20, 9, 23, 14, 23, 13, 18, 11, 11, 11, 15, 14, 18, 12, 18, 21, 22, 17, 16, 9, 11, 17, 13,\
+18, 15, 12, 15]
+data_2= [26, 25, 31, 24, 24, 29, 27, 27, 21, 24, 20, 23, 25, 28, 23, 22, 22, 29, 30, 18, 18, 18, 30, 29,\
+ 24, 23, 28, 29, 29, 18, 26, 21, 16, 30, 22, 27, 30, 32, 17, 15, 29, 19, 25, 20, 17, 27, 15, 26,\
+ 15, 14, 16, 17, 21, 17, 22, 28, 27, 21, 25, 24, 22, 21, 20, 27, 24, 19, 25, 22, 28, 24, 32, 24,\
+ 21, 21, 27, 25, 31, 30]
+pop_mean= [0]
+
+mean_1= [sum(data_1)/len(data_1)]
+mean_2= [sum(data_2)/len(data_2)]
+print(f"N(1)= {len(data_1)}\nN(2)= {len(data_2)}\n")
+print(f"Mean(1): {mean_1}\nMean(2): {mean_2}\n")
+
+# subtract the mean of one dataset to each item in the dataset and add to another list for further calculations.
+calc_1=[]
+for b in mean_1:
+    for i in data_1:
+        deviation_1= i - b
+        deviations_1= round(deviation_1, 6)
+        calc_1.append(deviations_1)
+    print(f"List of deviation scores from the mean: {calc_1}")
+    
+calc_2=[]
+for b in mean_2:
+    for i in data_2:
+        deviation_1= i - b
+        deviations_1= round(deviation_1, 6)
+        calc_2.append(deviations_1)
+    print(f"List of deviation scores from the mean: {calc_2}")
+    
+def variance(data):
+    n= len(data)
+    mean= sum(data)/n
+    deviance=[(x-mean)**2 for x in data]
+    variance= sum(deviance)/n
+    return variance
+
+def stdev(data):
+    var= variance(data)
+    st_dev=var**.5
+    return st_dev
+
+# Sample data
+
+def Svariance(data):
+    n= len(data)
+    mean= sum(data)/n
+    deviance=[(x-mean)**2 for x in data]
+    Svariance= sum(deviance)/(n-1)
+    return Svariance
+
+def Sstdev(data):
+    var= Svariance(data)
+    Sst_dev=var**.5
+    return Sst_dev
+
+def std_er_mean(data):
+    n= len(data)
+    sqn= Sstdev(data)/(n**.5)
+    return sqn
+
+def t_value(data):
+    sqn= std_er_mean(data)
+    for i in mean_1:
+        for h in pop_mean:
+            q= i-h
+    st_er= q/sqn
+    return st_er
+
+print(f'-First dataset\nVariance= {variance(data_1)}\nStandard deviation= {stdev(data_1)}\n\nSample Variance= {Svariance(data_1)}')
+print(f'Sample Standard deviation= {Sstdev(data_1)}\n\nEstimated standard error of the mean: {std_er_mean(data_1)}')
+print(f't_value= {t_value(data_1)}\n\n')
+print(f'-Second dataset\nVariance= {variance(data_2)}\nStandard deviation= {stdev(data_2)}\n\nSample Variance= {Svariance(data_2)}')
+print(f'Sample Standard deviation= {Sstdev(data_2)}\n\nEstimated standard error of the mean: {std_er_mean(data_2)}')
+print(f't_value= {t_value(data_2)}')
+
+z_list_1= []
+for t in calc_1:
+    z_score= t/stdev(data_1)
+    z= round(z_score, 5)
+    z_list_1.append(z)
+print(z_list_1)
+
+z_list_2= []
+for t in calc_2:
+    z_score= t/stdev(data_2)
+    z= round(z_score, 5)
+    z_list_2.append(z)
+print(z_list_2)
+
+# Calculating correlation
+
+len(data_1) == len(data_2)
+
+# subtract i from one list from the coresponding i in the other list.
+x= [data_1 - data_2 for data_1, data_2 in zip(data_1, data_2)]
+cleaned = sorted(x, key= int)
+
+mean_1= [sum(data_1)/len(data_1)]
+mean_2= [sum(data_2)/len(data_2)]
+print(mean_1, mean_2)
+
+# subtract the mean of one dataset to each item in the dataset, for each dataset, and add to another 
+# list for further calculations.
+calc_1=[]
+calc_2=[]
+for b in mean_1:
+    for i in data_1:
+        deviation_1= i - b
+        deviations_1= round(deviation_1, 2)
+        calc_1.append(deviations_1)
+    print(calc_1)
+print(f'\n')
+for b in mean_2:
+    for i in data_2:
+        deviation_2= i - b
+        deviations_2= round(deviation_2, 2)
+        calc_2.append(deviations_2)
+    print(calc_2)
+    
+# Multiply deviations of one list of deviations to another and add them together
+xy_1= [calc_1*calc_2 for calc_1, calc_2 in zip(calc_1, calc_2)]
+for i in xy_1:
+    xy= round(i, 3)
+    sumdev= sum(xy_1)
+    print(xy)
+print(f'\nThe sum of the deviations of the lists are:\n {sumdev}')
+
+# Calculating correlation continued: Square each item of deviations in each list and add them together
+sqsum1= []
+sqsum2= []
+
+for g in calc_1:
+    x_2=g**2
+    x2=round(x_2,4)
+    sqsum1.append(x2)
+print(f'{sqsum1}\n')
+print(f'The sum of the squared deviations of data_1 is {sum(sqsum1)}\n')
+for e in calc_2:
+    y_2=e**2
+    y2=round(y_2,4)
+    sqsum2.append(y2)
+print(f'{sqsum2}\n')
+print(f'The sum of the squared deviations of data_2 is {sum(sqsum2)}\n')
+# Multiply the summed values of both deviation lists and then take the square root of that answer
+ex2ey2= [sum(sqsum1)*sum(sqsum2)]
+print(ex2ey2)
+for i in ex2ey2:
+    sqex2ey2= i**.5
+    print(sqex2ey2)
+
+r= sumdev/sqex2ey2
+print(f'\nThe correlation of r= {round(r, 5)}')
